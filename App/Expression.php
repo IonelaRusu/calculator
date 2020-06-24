@@ -8,10 +8,18 @@ use App\Entities\NodeStack;
 use App\Entities\OperandNode;
 use App\Entities\OperatorNode;
 use App\Entities\Tree;
+use App\Exceptions\InvalidExpressionException;
 use App\Factory\NodeFactory;
+use App\Validators\ExpressionValidator;
 
-class Evaluator
+class Expression
 {
+    public ExpressionValidator $expressionValidator;
+    public function __construct(ExpressionValidator $expressionValidator)
+    {
+        $this->expressionValidator = $expressionValidator;
+    }
+
     public function process(string $type, string $token, NodeStack $operandsStack)
     {
         $nodeFactory = new NodeFactory();
@@ -23,10 +31,8 @@ class Evaluator
         }
 
         if ($node instanceof OperatorNode) {
-            if(empty($operandsStack)) {
-                echo "You can not have an operator introduces, without any operands";
-                return ; ///something
-            }
+            $this->expressionValidator->validateExpression($operandsStack->getStack());
+
             $tree->build($node, $operandsStack);
         }
 

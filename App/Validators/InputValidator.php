@@ -1,10 +1,12 @@
 <?php
 
 
-namespace App;
+namespace App\Validators;
 
 
-class Validator
+use App\Exceptions\ExitException;
+
+class InputValidator
 {
     public function containsOnlyOperands(string $token): int
     {
@@ -21,6 +23,7 @@ class Validator
         if ($this->containsOnlyOperands($token)){
             return "operand";
         }
+
         if ($this->containsOnlyOperators($token)){
             return "operator";
         }
@@ -32,20 +35,26 @@ class Validator
     {
         $size = count($tokenArray);
         if (empty($tokenArray)) {
-            echo "Invalid operator or operand.";
+            echo "Invalid operator or operand.\n";
         }
+
+        if (in_array( "q", $tokenArray)) {
+            throw new ExitException();
+        }
+
         if (count($tokenArray) > 1) {
-            if ($this->verifyInputType($tokenArray[$size-1]) != "operators") {
-                echo "Invalid expression. An operator is missing or missplaced";
+            if ($this->verifyInputType($tokenArray[$size-1]) == "operand") {
+                echo "Invalid expression. An operator is missing or misplaced.\n";
                 return false;
             }
         }
 
-        if (count($tokenArray) == 2 && $this->verifyInputType($tokenArray[$size-1]) == "operators" )
-        {
-            echo "Invalid expression. You can not form an logical expression";
-            return false;
-        }
+//        if (count($tokenArray) == 2 && $this->verifyInputType($tokenArray[$size-1]) == "operator" )
+//        {
+//            echo "Invalid expression. You can not form an logical expression.\n";
+//            return false;
+//        }
+
         return true;
     }
 }

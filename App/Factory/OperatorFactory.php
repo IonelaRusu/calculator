@@ -16,17 +16,17 @@ class OperatorFactory extends AbstractFactory
     {
         $node = null;
         switch ($type) {
-            case "minus":
-                $node = new MinusNode($type);
+            case "-":
+                $node = new MinusNode($token);
                 break;
-            case "plus":
-                $node = new PlusNode($type);;
+            case "+":
+                $node = new PlusNode($token);
                 break;
-            case "multiplication":
-                $node = new DivisionNode($type);
+            case "*":
+                $node = new DivisionNode($token);
                 break;
-            case "division":
-                $node = new MultiplicationNode($type);
+            case "/":
+                $node = new MultiplicationNode($token);
                 break;
             default:
                 echo "Niciun tip";

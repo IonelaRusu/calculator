@@ -5,39 +5,59 @@ namespace App;
 
 
 use App\Entities\NodeStack;
+use App\Exceptions\ExitException;
+use App\Exceptions\InvalidExpressionException;
+use App\Validators\ExpressionValidator;
+use App\Validators\InputValidator;
 
 class Calculator
 {
-    public function receiveInput($file, $mode)
+    public function stop()
+    {
+        echo "Goodbye!\n";
+        exit(0);
+    }
+
+    public function start($file, $mode): void
     {
         $stream = fopen($file, $mode);
-        echo "\nPlease enter your expression:\n";
+        echo "\nHello, this is a command-line reverse polish notation calculator.\n";
+        echo "\nIf you want to exit please press 'q'.\n";
+        echo "\nIf you do not, then please enter your expression:\n";
         $operandsStack = new NodeStack();
-        $validator = new Validator();
-        $evaluator = new Evaluator();
+        $validator = new InputValidator();
+        $expressionValidator = new ExpressionValidator();
+        $expression = new Expression($expressionValidator);
 
         while ($line = fgets(STDIN, 1024)) {
-            echo $line;
-
             $tokenArray = preg_split('/\s+/', $line, -1, PREG_SPLIT_NO_EMPTY);
             print_r($tokenArray);
-            $isValidLine = $validator->validateLineInput($tokenArray);
+            try{
+                $isValidLine = $validator->validateLineInput($tokenArray);
+            } catch (ExitException $e) {
+                break;
+            }
 
             if ($isValidLine) {
                 foreach ($tokenArray as $key => $token) {
                     $type = $validator->verifyInputType($token);
 
                     if ($type == "invalid") {
-                        echo "Operands or operators were incorrectly introduced. Invalid type.";
-                        return false;
+                        echo "Operands or operators were incorrectly introduced. Invalid type.\n";
+                        break;
                     }
-
-                    $evaluator->process($type, $token, $operandsStack);
+                    try {
+                        $expression->process($type, $token, $operandsStack);
+                    } catch (InvalidExpressionException $e) {
+                        break 2;
+                    }
                 }
             } else {
                 break;
             }
-            fclose(STDIN);
         }
+
+        fclose(STDIN);
+        $this->stop();
     }
 }

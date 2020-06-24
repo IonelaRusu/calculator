@@ -4,7 +4,7 @@ namespace App\Entities;
 
 class Tree
 {
-    private static Tree $instance;
+    private static ?Tree $instance = null;
     private Node $root;
 
     private function __construct(){}

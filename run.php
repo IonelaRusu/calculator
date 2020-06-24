@@ -10,4 +10,4 @@ spl_autoload_register(function ($class) {
 use App\Calculator;
 
 $calculator = new Calculator();
-$calculator->receiveInput('php://stdin', 'r');
+$calculator->start('php://stdin', 'r');

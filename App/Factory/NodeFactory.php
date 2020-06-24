@@ -17,7 +17,8 @@ class NodeFactory extends AbstractFactory
                 $node = new OperandNode($token);
                 break;
             case "operator":
-                $node = (new OperatorFactory())->$this->makeNode($type, $token);
+                $type = $token;
+                $node = (new OperatorFactory())->makeNode($type, $token);
                 break;
             default:
                 echo "Niciun tip";
