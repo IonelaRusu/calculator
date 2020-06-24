@@ -20,4 +20,16 @@ class OperandNode extends Node
     {
         return $this->leftChild;
     }
+
+    public function setRightChild(Node $rightChild): Node
+    {
+         $this->rightChild = $rightChild;
+         return $this;
+    }
+
+    public function setLeftChild(Node $leftChild): Node
+    {
+         $this->leftChild = $leftChild;
+         return $this;
+    }
 }

@@ -4,9 +4,8 @@ namespace App\Entities;
 
 class Tree
 {
-    private static $instance;
+    private static Tree $instance;
     private Node $root;
-    private Node $node;
 
     private function __construct(){}
 
@@ -19,9 +18,15 @@ class Tree
         return self::$instance;
     }
 
-    public function build(array $operandsStack, string $token)
+    public function build(Node $node, NodeStack $operandsStack): void
     {
+        $rightChild = $operandsStack->extractNodeFromStack();
+        $leftChild = $operandsStack->extractNodeFromStack();
+        $node->setRightChild($rightChild);
+        $node->setLeftChild($leftChild);
 
+        $this->setRoot($node);
+        $operandsStack->addNodeToStack($this->root);
     }
 
     public function getRoot(): Node
@@ -34,16 +39,4 @@ class Tree
         $this->root = $root;
         return $this;
     }
-
-    public function getNode(): Node
-    {
-        return $this->node;
-    }
-
-    public function setNode(Node $node): Tree
-    {
-        $this->node = $node;
-        return $this;
-    }
-
 }

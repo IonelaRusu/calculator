@@ -10,17 +10,20 @@ abstract class Node
     protected ?Node $leftChild;
     protected ?Node $rightChild;
 
-    public function __construct(string $value, Node $leftChild = null, Node $rightChild = null)
+    public function __construct(string $value)
     {
         $this->value =  $value;
-        $this->leftChild =  $leftChild;
-        $this->rightChild =  $rightChild;
+        $this->leftChild =  null;
+        $this->rightChild =  null;
     }
 
     abstract public function getValue(): string;
 
+    abstract public function setRightChild(Node $rightChild): Node;
+
     abstract public function getRightChild(): ?Node;
 
-    abstract public function getLeftChild(): ?Node;
+    abstract public function setLeftChild(Node $leftChild): Node;
 
+    abstract public function getLeftChild(): ?Node;
 }
