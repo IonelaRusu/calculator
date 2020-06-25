@@ -5,8 +5,10 @@ namespace App;
 
 
 use App\Entities\NodeStack;
+use App\Exceptions\ArithmeticException;
 use App\Exceptions\ExitException;
 use App\Exceptions\InvalidExpressionException;
+use App\Exceptions\InvalidTypeException;
 use App\Validators\ExpressionValidator;
 use App\Validators\InputValidator;
 use App\Visitor\NodeCalculationVisitor;
@@ -15,7 +17,7 @@ class Calculator
 {
     public function stop()
     {
-        echo "Goodbye!\n";
+        echo "Quiting...\n";
         exit(0);
     }
 
@@ -36,27 +38,30 @@ class Calculator
             try{
                 $isValidLine = $validator->validateLineInput($tokenArray);
             } catch (ExitException $e) {
+                echo $e->getMessage() . "\n";
                 break;
             }
 
             if ($isValidLine) {
                 foreach ($tokenArray as $key => $token) {
-                    $type = $validator->verifyInputType($token);
-
-                    if ($type == "invalid") {
-                        echo "Operands or operators were incorrectly introduced. Invalid type.\n";
-                        break;
-                    }
                     try {
-                        $expression->process($type, $token, $operandsStack);
-                        if($type == "operator" && ($key == count($tokenArray)-1 || $key == 0)){
+                        $type = $validator->getVerifiedInputType($token);
+                        $expression->process($token, $type, $operandsStack);
+                        if ($validator->validateInputFormatForCalculation($tokenArray, $type, $key)) {
                             $nodeVisitor = new NodeCalculationVisitor();
-                            $expression->calculate($operandsStack, $nodeVisitor);
+                            $expression->calculate($nodeVisitor);
+                            $this->displayCalculationResult($operandsStack);
                         } else {
-                            echo $token . "\n";
+                            $this->displayInputOperators($tokenArray, $key, $type, $token);
                         }
-
+                    } catch (InvalidTypeException $e) {
+                        echo $e->getMessage() . "\n";
+                        break 2;
                     } catch (InvalidExpressionException $e) {
+                        echo $e->getMessage() . "\n";
+                        break 2;
+                    }  catch (ArithmeticException $e) {
+                        echo $e->getMessage() . "\n";
                         break 2;
                     }
                 }
@@ -67,5 +72,20 @@ class Calculator
 
         fclose(STDIN);
         $this->stop();
+    }
+
+    public function displayInputOperators(array $tokenArray, int $key, string $type, string $token): void
+    {
+        if (count($tokenArray) == 1 && $key == 0 && $type == "operand") {
+            echo $token . "\n";
+        }
+    }
+
+    public function displayCalculationResult(NodeStack $operandsStack): void
+    {
+        $array = $operandsStack->getStack();
+        $result = end($array);
+
+        echo $result->getValue() . "\n";
     }
 }

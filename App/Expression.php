@@ -19,7 +19,7 @@ class Expression
         $this->expressionValidator = $expressionValidator;
     }
 
-    public function process(string $type, string $token, NodeStack $operandsStack): void
+    public function process(string $token, string $type, NodeStack $operandsStack): void
     {
         $nodeFactory = new NodeFactory();
         $node = $nodeFactory->makeNode($type, $token);
@@ -30,14 +30,13 @@ class Expression
         }
 
         if ($node instanceof OperatorNode) {
-
             $this->expressionValidator->validateExpression($operandsStack->getStack());
             $tree->build($node, $operandsStack);
             $tree->setRoot($node);
         }
     }
 
-    public function calculate($operandsStack, $nodeVisitor): void
+    public function calculate($nodeVisitor): void
     {
         $tree = Tree::getInstance();
         $node = $tree->getRoot();

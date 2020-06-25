@@ -5,6 +5,7 @@ namespace App\Validators;
 
 
 use App\Exceptions\ExitException;
+use App\Exceptions\InvalidTypeException;
 
 class InputValidator
 {
@@ -18,7 +19,7 @@ class InputValidator
         return preg_match_all('/^[\-+*\\/^]$/', $token);
     }
 
-    public function verifyInputType(string $token): string
+    public function getVerifiedInputType(string $token): string
     {
         if ($this->containsOnlyOperands($token)){
             return "operand";
@@ -28,7 +29,16 @@ class InputValidator
             return "operator";
         }
 
-        return "invalid";
+        throw new InvalidTypeException("Operands or operators were incorrectly introduced. Invalid type." . "\n");
+    }
+
+    public function validateInputFormatForCalculation(array $tokenArray, string $type, int $key): bool
+    {
+        $size = count($tokenArray);
+        if ($type == "operator" && ($key == $size-1 || $key == 0)) {
+            return true;
+        }
+        return false;
     }
 
     public function validateLineInput(array $tokenArray): bool
@@ -43,7 +53,7 @@ class InputValidator
         }
 
         if (count($tokenArray) > 1) {
-            if ($this->verifyInputType($tokenArray[$size-1]) == "operand") {
+            if ($this->getVerifiedInputType($tokenArray[$size-1]) == "operand") {
                 echo "Invalid expression. An operator is missing or misplaced.\n";
                 return false;
             }

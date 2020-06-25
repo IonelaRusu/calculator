@@ -15,10 +15,8 @@ class PostOrder
             return ;
         }
 
-        $this->postOrderTraversal($node->getLeftChild(),$nodeVisitor);
-        $this->postOrderTraversal($node->getRightChild(),$nodeVisitor);
+        $this->postOrderTraversal($node->getLeftChild(), $nodeVisitor);
+        $this->postOrderTraversal($node->getRightChild(), $nodeVisitor);
         $node->accept($nodeVisitor);
-        echo $node->getValue() . "\n";
     }
-
 }

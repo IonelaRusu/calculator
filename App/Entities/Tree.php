@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use App\TraversalAlgorithm\PostOrder;
+use App\Visitor\NodeVisitor;
 
 class Tree
 {
@@ -42,7 +43,7 @@ class Tree
         return $this;
     }
 
-    public function traverse(Node $root,$nodeVisitor): void
+    public function traverse(Node $root, NodeVisitor $nodeVisitor): void
     {
         $algorithmTraversal = new PostOrder();
         $algorithmTraversal->postOrderTraversal($root, $nodeVisitor);

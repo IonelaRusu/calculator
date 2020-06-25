@@ -2,12 +2,8 @@
 
 ini_set('display_errors', true);
 error_reporting(E_ALL);
+require __DIR__ . '/autoload.php';
 
-spl_autoload_register(function ($class) {
-    require str_replace('\\', '/', $class) . '.php';
-});
 
-use App\Calculator;
-
-$calculator = new Calculator();
+$calculator = new App\Calculator();
 $calculator->start('php://stdin', 'r');
