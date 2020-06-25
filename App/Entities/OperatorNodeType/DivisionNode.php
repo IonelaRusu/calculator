@@ -11,6 +11,12 @@ use App\Visitor\NodeVisitor;
 
 class DivisionNode extends OperatorNode
 {
+    public function setValue(string $value): Node
+    {
+        $this->value = $value;
+        return $this;
+    }
+
     public function getValue(): string
     {
         return $this->value;

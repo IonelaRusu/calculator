@@ -9,6 +9,7 @@ use App\Exceptions\ExitException;
 use App\Exceptions\InvalidExpressionException;
 use App\Validators\ExpressionValidator;
 use App\Validators\InputValidator;
+use App\Visitor\NodeCalculationVisitor;
 
 class Calculator
 {
@@ -30,8 +31,8 @@ class Calculator
         $expression = new Expression($expressionValidator);
 
         while ($line = fgets(STDIN, 1024)) {
+
             $tokenArray = preg_split('/\s+/', $line, -1, PREG_SPLIT_NO_EMPTY);
-            print_r($tokenArray);
             try{
                 $isValidLine = $validator->validateLineInput($tokenArray);
             } catch (ExitException $e) {
@@ -48,6 +49,13 @@ class Calculator
                     }
                     try {
                         $expression->process($type, $token, $operandsStack);
+                        if($type == "operator" && ($key == count($tokenArray)-1 || $key == 0)){
+                            $nodeVisitor = new NodeCalculationVisitor();
+                            $expression->calculate($operandsStack, $nodeVisitor);
+                        } else {
+                            echo $token . "\n";
+                        }
+
                     } catch (InvalidExpressionException $e) {
                         break 2;
                     }

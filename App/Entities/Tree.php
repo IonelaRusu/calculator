@@ -2,6 +2,8 @@
 
 namespace App\Entities;
 
+use App\TraversalAlgorithm\PostOrder;
+
 class Tree
 {
     private static ?Tree $instance = null;
@@ -13,7 +15,7 @@ class Tree
     public static function getInstance(): Tree
     {
         if (self::$instance == null) {
-            self::$instance  = new Tree();
+            self::$instance = new Tree();
         }
         return self::$instance;
     }
@@ -38,5 +40,11 @@ class Tree
     {
         $this->root = $root;
         return $this;
+    }
+
+    public function traverse(Node $root,$nodeVisitor): void
+    {
+        $algorithmTraversal = new PostOrder();
+        $algorithmTraversal->postOrderTraversal($root, $nodeVisitor);
     }
 }

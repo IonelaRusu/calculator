@@ -22,14 +22,14 @@ class OperatorFactory extends AbstractFactory
             case "+":
                 $node = new PlusNode($token);
                 break;
-            case "*":
+            case "/":
                 $node = new DivisionNode($token);
                 break;
-            case "/":
+            case "*":
                 $node = new MultiplicationNode($token);
                 break;
             default:
-                echo "Niciun tip";
+                echo "Unknown operator";
                 break;
         }
         return $node;

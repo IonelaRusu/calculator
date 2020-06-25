@@ -4,6 +4,8 @@
 namespace App\Entities;
 
 
+use App\Visitor\NodeVisitor;
+
 abstract class Node
 {
     protected string $value;
@@ -16,6 +18,7 @@ abstract class Node
         $this->leftChild =  null;
         $this->rightChild =  null;
     }
+    abstract public function setValue(string $value): Node;
 
     abstract public function getValue(): string;
 
@@ -26,4 +29,6 @@ abstract class Node
     abstract public function setLeftChild(Node $leftChild): Node;
 
     abstract public function getLeftChild(): ?Node;
+
+    abstract public function accept(NodeVisitor $nodeVisitor): void;
 }
