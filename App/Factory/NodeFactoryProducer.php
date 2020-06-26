@@ -7,9 +7,9 @@ namespace App\Factory;
 use App\Entities\Node;
 use App\Entities\OperandNode;
 
-class NodeFactory extends AbstractFactory
+class NodeFactoryProducer
 {
-    function makeNode(string $type, string $token): Node
+    public function getNode(string $type, string $token): Node
     {
         $node = null;
         switch ($type) {
@@ -17,11 +17,10 @@ class NodeFactory extends AbstractFactory
                 $node = new OperandNode($token);
                 break;
             case "operator":
-                $type = $token;
-                $node = (new OperatorFactory())->makeNode($type, $token);
+                $node = (new OperatorFactory())->getNode($token);
                 break;
             default:
-                echo "Niciun tip";
+                echo "Unknown node type";
                 break;
         }
         return $node;

@@ -18,17 +18,39 @@ abstract class Node
         $this->leftChild =  null;
         $this->rightChild =  null;
     }
-    abstract public function setValue(string $value): Node;
 
-    abstract public function getValue(): string;
+    public function setValue(string $value): Node
+    {
+        $this->value = $value;
+        return $this;
+    }
 
-    abstract public function setRightChild(Node $rightChild): Node;
+    public function getValue(): string
+    {
+        return $this->value;
+    }
 
-    abstract public function getRightChild(): ?Node;
+    public function getRightChild(): ?Node
+    {
+        return $this->rightChild;
+    }
 
-    abstract public function setLeftChild(Node $leftChild): Node;
+    public function getLeftChild(): ?Node
+    {
+        return $this->leftChild;
+    }
 
-    abstract public function getLeftChild(): ?Node;
+    public function setRightChild(Node $rightChild): Node
+    {
+        $this->rightChild = $rightChild;
+        return $this;
+    }
 
-    abstract public function accept(NodeVisitor $nodeVisitor): void;
+    public function setLeftChild(Node $leftChild): Node
+    {
+        $this->leftChild = $leftChild;
+        return $this;
+    }
+
+    abstract function accept(NodeVisitor $nodeVisitor): void;
 }

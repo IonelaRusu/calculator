@@ -8,7 +8,8 @@ use App\Entities\NodeStack;
 use App\Entities\OperandNode;
 use App\Entities\OperatorNode;
 use App\Entities\Tree;
-use App\Factory\NodeFactory;
+use App\Factory\NodeFactoryProducer;
+use App\Factory\OperandNodeBuilding;
 use App\Validators\ExpressionValidator;
 
 class Expression
@@ -21,8 +22,8 @@ class Expression
 
     public function process(string $token, string $type, NodeStack $operandsStack): void
     {
-        $nodeFactory = new NodeFactory();
-        $node = $nodeFactory->makeNode($type, $token);
+        $nodeBuilding = new NodeFactoryProducer();
+        $node = $nodeBuilding->getNode($type , $token);
         $tree = Tree::getInstance(); //return same instance
 
         if ($node instanceof OperandNode) {

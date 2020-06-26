@@ -3,7 +3,6 @@
 
 namespace App\Factory;
 
-
 use App\Entities\Node;
 use App\Entities\OperatorNodeType\DivisionNode;
 use App\Entities\OperatorNodeType\MinusNode;
@@ -12,24 +11,29 @@ use App\Entities\OperatorNodeType\PlusNode;
 
 class OperatorFactory extends AbstractFactory
 {
-    function makeNode(string $type, string $token): Node
+    public function getNode(string $tokenType): Node
+    {
+        return $this->makeNode($tokenType);
+    }
+
+    function makeNode(string $tokenType): Node
     {
         $node = null;
-        switch ($type) {
+        switch ($tokenType) {
             case "-":
-                $node = new MinusNode($token);
+                $node = new MinusNode($tokenType);
                 break;
             case "+":
-                $node = new PlusNode($token);
+                $node = new PlusNode($tokenType);
                 break;
             case "/":
-                $node = new DivisionNode($token);
+                $node = new DivisionNode($tokenType);
                 break;
             case "*":
-                $node = new MultiplicationNode($token);
+                $node = new MultiplicationNode($tokenType);
                 break;
             default:
-                echo "Unknown operator";
+                echo "Unknown token type";
                 break;
         }
         return $node;
