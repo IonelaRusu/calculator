@@ -9,7 +9,7 @@ use App\Exceptions\InvalidExpressionException;
 class ExpressionValidator
 {
 
-    public function validateExpression(array $stack)
+    public function validateExpression(array $stack): void
     {
         if(empty($stack)) {
             throw new InvalidExpressionException("You can not have operators introduces, without enough operands.\n");

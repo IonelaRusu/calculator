@@ -5,18 +5,18 @@ namespace App\Validators;
 
 
 use App\Exceptions\ExitException;
-use App\Exceptions\InvalidTypeException;
+use App\Exceptions\InvalidInputTypeException;
 
 class InputValidator
 {
-    public function containsOnlyOperands(string $token): int
+    public function containsOnlyOperands(string $token): bool
     {
         return preg_match_all('/^-?(?:\d+|\d+\.\d+)$/', $token) ;
     }
 
-    public function containsOnlyOperators(string $token): int
+    public function containsOnlyOperators(string $token): bool
     {
-        return preg_match_all('/^[\-+*\\/^]$/', $token);
+        return preg_match_all('/^[\-+*\/]$/', $token);
     }
 
     public function getVerifiedInputType(string $token): string
@@ -29,10 +29,10 @@ class InputValidator
             return "operator";
         }
 
-        throw new InvalidTypeException("Operands or operators were incorrectly introduced. Invalid type." . "\n");
+        throw new InvalidInputTypeException("Operands or operators were incorrectly introduced. Invalid type." . "\n");
     }
 
-    public function validateInputFormatForCalculation(array $tokenArray, string $type, int $key): bool
+    public function isValidInputFormatForCalculation(array $tokenArray, string $type, int $key): bool
     {
         $size = count($tokenArray);
         if ($type == "operator" && ($key == $size-1 || $key == 0)) {
@@ -41,11 +41,14 @@ class InputValidator
         return false;
     }
 
-    public function validateLineInput(array $tokenArray): bool
+    /**
+     * @throws InvalidInputTypeException
+     */
+    public function isValidLineInput(array $tokenArray): bool
     {
         $size = count($tokenArray);
         if (empty($tokenArray)) {
-            echo "Invalid operator or operand.\n";
+            throw new InvalidInputTypeException("Invalid operator or operand.\n");
         }
 
         if (in_array( "q", $tokenArray)) {
@@ -54,16 +57,9 @@ class InputValidator
 
         if (count($tokenArray) > 1) {
             if ($this->getVerifiedInputType($tokenArray[$size-1]) == "operand") {
-                echo "Invalid expression. An operator is missing or misplaced.\n";
-                return false;
+                throw new InvalidInputTypeException("Invalid input. An operator is missing or misplaced.\n");
             }
         }
-
-//        if (count($tokenArray) == 2 && $this->verifyInputType($tokenArray[$size-1]) == "operator" )
-//        {
-//            echo "Invalid expression. You can not form an logical expression.\n";
-//            return false;
-//        }
 
         return true;
     }

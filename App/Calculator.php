@@ -8,7 +8,8 @@ use App\Entities\NodeStack;
 use App\Exceptions\ArithmeticException;
 use App\Exceptions\ExitException;
 use App\Exceptions\InvalidExpressionException;
-use App\Exceptions\InvalidTypeException;
+use App\Exceptions\InvalidInputTypeException;
+use App\Exceptions\UnknownNodeTypeException;
 use App\Validators\ExpressionValidator;
 use App\Validators\InputValidator;
 use App\Visitor\NodeCalculationVisitor;
@@ -32,12 +33,15 @@ class Calculator
         $expressionValidator = new ExpressionValidator();
         $expression = new Expression($expressionValidator);
 
-        while ($line = fgets(STDIN, 1024)) {
+        while (($line = fgets($stream, 1024)) || !feof($stream)) {
 
             $tokenArray = preg_split('/\s+/', $line, -1, PREG_SPLIT_NO_EMPTY);
             try{
-                $isValidLine = $validator->validateLineInput($tokenArray);
+                $isValidLine = $validator->isValidLineInput($tokenArray);
             } catch (ExitException $e) {
+                echo $e->getMessage() . "\n";
+                break;
+            } catch (InvalidInputTypeException $e) {
                 echo $e->getMessage() . "\n";
                 break;
             }
@@ -47,20 +51,23 @@ class Calculator
                     try {
                         $type = $validator->getVerifiedInputType($token);
                         $expression->process($token, $type, $operandsStack);
-                        if ($validator->validateInputFormatForCalculation($tokenArray, $type, $key)) {
+                        if ($validator->isValidInputFormatForCalculation($tokenArray, $type, $key)) {
                             $nodeVisitor = new NodeCalculationVisitor();
                             $expression->calculate($nodeVisitor);
                             $this->displayCalculationResult($operandsStack);
                         } else {
                             $this->displayInputOperators($tokenArray, $key, $type, $token);
                         }
-                    } catch (InvalidTypeException $e) {
+                    } catch (InvalidInputTypeException $e) {
                         echo $e->getMessage() . "\n";
                         break 2;
                     } catch (InvalidExpressionException $e) {
                         echo $e->getMessage() . "\n";
                         break 2;
                     }  catch (ArithmeticException $e) {
+                        echo $e->getMessage() . "\n";
+                        break 2;
+                    } catch (UnknownNodeTypeException $e) {
                         echo $e->getMessage() . "\n";
                         break 2;
                     }
@@ -70,7 +77,7 @@ class Calculator
             }
         }
 
-        fclose(STDIN);
+        fclose($stream);
         $this->stop();
     }
 

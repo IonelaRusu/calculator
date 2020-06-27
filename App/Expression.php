@@ -8,8 +8,9 @@ use App\Entities\NodeStack;
 use App\Entities\OperandNode;
 use App\Entities\OperatorNode;
 use App\Entities\Tree;
+use App\Exceptions\InvalidExpressionException;
+use App\Exceptions\UnknownNodeTypeException;
 use App\Factory\NodeFactoryProducer;
-use App\Factory\OperandNodeBuilding;
 use App\Validators\ExpressionValidator;
 
 class Expression
@@ -20,6 +21,10 @@ class Expression
         $this->expressionValidator = $expressionValidator;
     }
 
+    /**
+     * @throws UnknownNodeTypeException
+     * @throws InvalidExpressionException
+     */
     public function process(string $token, string $type, NodeStack $operandsStack): void
     {
         $nodeBuilding = new NodeFactoryProducer();

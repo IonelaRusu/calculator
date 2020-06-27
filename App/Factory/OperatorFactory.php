@@ -8,15 +8,14 @@ use App\Entities\OperatorNodeType\DivisionNode;
 use App\Entities\OperatorNodeType\MinusNode;
 use App\Entities\OperatorNodeType\MultiplicationNode;
 use App\Entities\OperatorNodeType\PlusNode;
+use App\Exceptions\UnknownNodeTypeException;
 
 class OperatorFactory extends AbstractFactory
 {
-    public function getNode(string $tokenType): Node
-    {
-        return $this->makeNode($tokenType);
-    }
-
-    function makeNode(string $tokenType): Node
+    /**
+     * @throws UnknownNodeTypeException
+     */
+    protected function makeNode(string $tokenType): Node
     {
         $node = null;
         switch ($tokenType) {
@@ -33,9 +32,17 @@ class OperatorFactory extends AbstractFactory
                 $node = new MultiplicationNode($tokenType);
                 break;
             default:
-                echo "Unknown token type";
-                break;
+                throw new UnknownNodeTypeException("Unknown token type.");
         }
+
         return $node;
+    }
+
+    /**
+     * @throws UnknownNodeTypeException
+     */
+    public function getNode(string $tokenType): Node
+    {
+        return $this->makeNode($tokenType);
     }
 }

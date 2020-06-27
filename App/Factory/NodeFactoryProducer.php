@@ -6,9 +6,13 @@ namespace App\Factory;
 
 use App\Entities\Node;
 use App\Entities\OperandNode;
+use App\Exceptions\UnknownNodeTypeException;
 
 class NodeFactoryProducer
 {
+    /**
+     * @throws UnknownNodeTypeException
+     */
     public function getNode(string $type, string $token): Node
     {
         $node = null;
@@ -20,9 +24,9 @@ class NodeFactoryProducer
                 $node = (new OperatorFactory())->getNode($token);
                 break;
             default:
-                echo "Unknown node type";
-                break;
+                throw new UnknownNodeTypeException("Unknown node type.");
         }
+
         return $node;
     }
 }

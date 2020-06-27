@@ -35,6 +35,9 @@ class NodeCalculationVisitor implements NodeVisitor
        return $result;
     }
 
+    /**
+     * @throws ArithmeticException
+     */
     public function visitDivisionNode(DivisionNode $node): float
     {
         if (floatval($node->getRightChild()->getValue()) != 0) {
