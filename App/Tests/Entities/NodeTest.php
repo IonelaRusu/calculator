@@ -18,7 +18,7 @@ class NodeTest extends TestCase
         parent::setUp();
         $this->anonymousAbstractClass = new class($this->value) extends Node {
 
-            function accept(NodeVisitor $nodeVisitor): void{}
+            public function accept(NodeVisitor $nodeVisitor): void{}
 
             public function returnThis()
             {

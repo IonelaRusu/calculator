@@ -15,5 +15,4 @@ class TreeTest extends TestCase
         $this->tree = Tree::getInstance();
     }
 
-//    public function
 }

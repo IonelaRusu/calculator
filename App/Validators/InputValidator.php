@@ -21,15 +21,15 @@ class InputValidator
 
     public function getVerifiedInputType(string $token): string
     {
-        if ($this->containsOnlyOperands($token)){
+        if ($this->containsOnlyOperands($token)) {
             return "operand";
         }
 
-        if ($this->containsOnlyOperators($token)){
+        if ($this->containsOnlyOperators($token)) {
             return "operator";
         }
 
-        throw new InvalidInputTypeException("Operands or operators were incorrectly introduced. Invalid type." . "\n");
+        throw new InvalidInputTypeException("Operands or operators were incorrectly introduced. Invalid type.");
     }
 
     public function isValidInputFormatForCalculation(array $tokenArray, string $type, int $key): bool
@@ -38,17 +38,19 @@ class InputValidator
         if ($type == "operator" && ($key == $size-1 || $key == 0)) {
             return true;
         }
+
         return false;
     }
 
     /**
      * @throws InvalidInputTypeException
+     * @throws ExitException
      */
     public function isValidLineInput(array $tokenArray): bool
     {
         $size = count($tokenArray);
         if (empty($tokenArray)) {
-            throw new InvalidInputTypeException("Invalid operator or operand.\n");
+            throw new InvalidInputTypeException("Invalid operator or operand.");
         }
 
         if (in_array( "q", $tokenArray)) {
@@ -57,7 +59,7 @@ class InputValidator
 
         if (count($tokenArray) > 1) {
             if ($this->getVerifiedInputType($tokenArray[$size-1]) == "operand") {
-                throw new InvalidInputTypeException("Invalid input. An operator is missing or misplaced.\n");
+                throw new InvalidInputTypeException("Invalid input. An operator is missing or misplaced.");
             }
         }
 

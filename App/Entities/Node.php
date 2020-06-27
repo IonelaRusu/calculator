@@ -22,6 +22,7 @@ abstract class Node
     public function setValue(string $value): Node
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -43,14 +44,16 @@ abstract class Node
     public function setRightChild(Node $rightChild): Node
     {
         $this->rightChild = $rightChild;
+
         return $this;
     }
 
     public function setLeftChild(Node $leftChild): Node
     {
         $this->leftChild = $leftChild;
+
         return $this;
     }
 
-    abstract function accept(NodeVisitor $nodeVisitor): void;
+    abstract public function accept(NodeVisitor $nodeVisitor): void;
 }

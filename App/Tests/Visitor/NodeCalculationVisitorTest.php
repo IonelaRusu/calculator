@@ -17,17 +17,16 @@ use PHPUnit\Framework\TestCase;
 class NodeCalculationVisitorTest extends TestCase
 {
     private NodeCalculationVisitor $nodeCalculationVisitor;
+
     public function setUp(): void
     {
        $this->nodeCalculationVisitor = new NodeCalculationVisitor();
-
     }
 
     public function testVisitDivisionNode(): void
     {
         $nodeMock = $this->getMockBuilder(DivisionNode::class)
             ->disableOriginalConstructor()->getMock();
-
         $this->setNodeChildren($nodeMock, "9", "3");
 
         $this->assertEquals("3", $this->nodeCalculationVisitor->visitDivisionNode($nodeMock));
@@ -39,7 +38,6 @@ class NodeCalculationVisitorTest extends TestCase
 
         $nodeMock = $this->getMockBuilder(DivisionNode::class)
             ->disableOriginalConstructor()->getMock();
-
         $this->setNodeChildren($nodeMock, "9", "0");
 
         $this->nodeCalculationVisitor->visitDivisionNode($nodeMock);
@@ -49,7 +47,6 @@ class NodeCalculationVisitorTest extends TestCase
     {
         $nodeMock = $this->getMockBuilder(MinusNode::class)
             ->disableOriginalConstructor()->getMock();
-
         $this->setNodeChildren($nodeMock, "9", "3");
 
         $this->assertEquals("6", $this->nodeCalculationVisitor->visitMinusNode($nodeMock));
@@ -59,7 +56,6 @@ class NodeCalculationVisitorTest extends TestCase
     {
         $nodeMock = $this->getMockBuilder(PlusNode::class)
             ->disableOriginalConstructor()->getMock();
-
         $this->setNodeChildren($nodeMock, "9", "3");
 
         $this->assertEquals("12", $this->nodeCalculationVisitor->visitPlusNode($nodeMock));
@@ -69,7 +65,6 @@ class NodeCalculationVisitorTest extends TestCase
     {
         $nodeMock = $this->getMockBuilder(MultiplicationNode::class)
             ->disableOriginalConstructor()->getMock();
-
         $this->setNodeChildren($nodeMock, "9", "3");
 
         $this->assertEquals("27", $this->nodeCalculationVisitor->visitMultiplicationNode($nodeMock));

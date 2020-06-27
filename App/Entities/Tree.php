@@ -12,7 +12,6 @@ class Tree
 
     private function __construct(){}
 
-    //lazy instantiation version
     public static function getInstance(): Tree
     {
         if (self::$instance == null) {
@@ -21,15 +20,15 @@ class Tree
         return self::$instance;
     }
 
-    public function build(Node $node, NodeStack $operandsStack): void
+    public function build(Node $node, NodeStack $nodeStack): void
     {
-        $rightChild = $operandsStack->extractNodeFromStack();
-        $leftChild = $operandsStack->extractNodeFromStack();
+        $rightChild = $nodeStack->extractNodeFromStack();
+        $leftChild = $nodeStack->extractNodeFromStack();
         $node->setRightChild($rightChild);
         $node->setLeftChild($leftChild);
 
         $this->setRoot($node);
-        $operandsStack->addNodeToStack($this->root);
+        $nodeStack->addNodeToStack($this->root);
     }
 
     public function getRoot(): Node

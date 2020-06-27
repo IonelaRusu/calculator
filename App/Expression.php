@@ -25,19 +25,19 @@ class Expression
      * @throws UnknownNodeTypeException
      * @throws InvalidExpressionException
      */
-    public function process(string $token, string $type, NodeStack $operandsStack): void
+    public function process(string $token, string $type, NodeStack $nodeStack): void
     {
         $nodeBuilding = new NodeFactoryProducer();
         $node = $nodeBuilding->getNode($type , $token);
-        $tree = Tree::getInstance(); //return same instance
+        $tree = Tree::getInstance();
 
         if ($node instanceof OperandNode) {
-             $operandsStack->addNodeToStack($node);
+             $nodeStack->addNodeToStack($node);
         }
 
         if ($node instanceof OperatorNode) {
-            $this->expressionValidator->validateExpression($operandsStack->getStack());
-            $tree->build($node, $operandsStack);
+            $this->expressionValidator->validateExpression($nodeStack->getStack());
+            $tree->build($node, $nodeStack);
             $tree->setRoot($node);
         }
     }

@@ -29,6 +29,7 @@ class NodeStackTest extends TestCase
         $node = new OperandNode("29");
         $this->nodeStack->addNodeToStack($node);
         $extractedNode = $this->nodeStack->extractNodeFromStack();
+
         $this->assertInstanceOf(Node::class, $extractedNode );
         $this->assertEquals($node->getValue(), $extractedNode->getValue());
         $this->assertNull($extractedNode->getLeftChild());
