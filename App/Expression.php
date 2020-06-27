@@ -15,7 +15,8 @@ use App\Validators\ExpressionValidator;
 
 class Expression
 {
-    public ExpressionValidator $expressionValidator;
+    private ExpressionValidator $expressionValidator;
+
     public function __construct(ExpressionValidator $expressionValidator)
     {
         $this->expressionValidator = $expressionValidator;
@@ -27,8 +28,8 @@ class Expression
      */
     public function process(string $token, string $type, NodeStack $nodeStack): void
     {
-        $nodeBuilding = new NodeFactoryProducer();
-        $node = $nodeBuilding->getNode($type , $token);
+        $nodeFactory = new NodeFactoryProducer();
+        $node = $nodeFactory->getNode($type , $token);
         $tree = Tree::getInstance();
 
         if ($node instanceof OperandNode) {

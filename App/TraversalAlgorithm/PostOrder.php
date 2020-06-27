@@ -3,7 +3,7 @@
 
 namespace App\TraversalAlgorithm;
 
-//postorder: left, right, root
+
 use App\Entities\Node;
 use App\Visitor\NodeVisitor;
 

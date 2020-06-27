@@ -18,7 +18,7 @@ class Calculator
 {
     const LENGTH = 1024;
 
-    public function stop($fd)
+    public function stop($fd): void
     {
         echo "Quiting...\n";
         fclose($fd);
@@ -35,7 +35,7 @@ class Calculator
         $expressionValidator = new ExpressionValidator();
         $expression = new Expression($expressionValidator);
 
-        while (($line = fgets($fd, self::LENGTH)) || !feof($fd)) {
+        while (($line = fgets($fd, self::LENGTH))) {
             while (strpos($line, "\n") == false && !feof($fd)) {
                 $line .= fgets($fd, self::LENGTH);
             }
