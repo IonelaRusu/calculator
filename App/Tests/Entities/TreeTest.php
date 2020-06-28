@@ -11,8 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class TreeTest extends TestCase
 {
-    public Tree $tree;
-
     public function testGetInstance()
     {
         $this->assertInstanceOf(Tree::class, Tree::getInstance());
